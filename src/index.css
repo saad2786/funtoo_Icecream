@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+body {
+  font-family: 'Truculenta', sans-serif;
+}
+
+.active button {
+  border-top: 2px solid black;
+}
+@tailwind utilities;
