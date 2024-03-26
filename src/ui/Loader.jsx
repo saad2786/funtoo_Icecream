@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Loader() {
   return (
-    <div className='h-full w-full absolute flex items-center justify-center backdrop-blur-sm top-0 left-0 '>
-      <span className='loading loading-bars loading-md'></span>
+    <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-slate-200 bg-opacity-50 backdrop-blur-sm ">
+      <span className="loading loading-bars loading-md"></span>
     </div>
   );
 }

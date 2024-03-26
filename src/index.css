@@ -3,8 +3,27 @@
 body {
   font-family: 'Truculenta', sans-serif;
 }
-
+html{
+  background-color: #DDDDDD;
+}
 .active button {
   border-top: 2px solid black;
+}
+.bg-texture {
+  background-color: #e5e5f7;
+  opacity: 1;
+  background-image: radial-gradient(#7f1d1d 0.6px, #e5e5f7 0.6px);
+  background-size: 10px 10px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.backgroundImage {
+  background-image: url('/images/background.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 @tailwind utilities;

@@ -2,8 +2,11 @@ import axios from "axios";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { toast } from "react-hot-toast";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 export default function PayTypeRow({ payType }) {
-  const formattedDate = format(payType.DATE, "dd-MM-yyyy");
+  const formattedDate = format(new Date(payType.DATE), "dd-MM-yyyy");
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: handleToggle,
@@ -12,19 +15,23 @@ export default function PayTypeRow({ payType }) {
       toast.success("Status Changed");
     },
     onError: () => {
-      toast.error("Somthing went wrong");
+      toast.error("Status didn't change!");
     },
   });
   async function handleToggle() {
-    try {
-      const data = {
-        status: payType.ACTIVE ? 0 : 1,
-        payTypeId: payType.PTID,
-      };
-      const response = await axios.put("http://localhost:8000/paytype", data);
-      console.log(response);
-    } catch (err) {
-      console.log(err);
+    if (confirm("Do you really want to change status?")) {
+      try {
+        const data = {
+          status: payType.ACTIVE ? 0 : 1,
+          payTypeId: payType.PTID,
+        };
+        const response = await axios.put(`${BASE_URL}/paytype`, data);
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      throw new Error("Don't want to change status");
     }
   }
   return (

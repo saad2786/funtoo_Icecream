@@ -29,7 +29,6 @@ const getItems = async () => {
      SELECT * FROM [Chaha].[dbo].[TBL_PRODUCT_MASTER]
      `,
     );
-    console.log(result);
 
     return result;
   } catch (err) {
@@ -46,7 +45,7 @@ const addProduct = async ({ name, price }) => {
       VALUES ('${name}', ${price}, '${currDate}', 1)
     `,
     );
-    console.log(result);
+
     return result;
   } catch (err) {
     console.error("Error creating transaction:", err);
@@ -59,10 +58,24 @@ const toggleProductStatus = async ({ status, itemId }) => {
       `  UPDATE [Chaha].[dbo].[TBL_PRODUCT_MASTER] SET ACTIVE = ${status} WHERE PID = ${itemId};
     `,
     );
-    console.log(result);
+
     return result;
   } catch (err) {
     console.error("Error creating transaction:", err);
+  }
+};
+const updateProduct = async ({ id, name, price }) => {
+  const currDate = new Date().toISOString();
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request().query(
+      `  UPDATE [Chaha].[dbo].[TBL_PRODUCT_MASTER] SET PRODUCT_NAME = N'${name}' , MRP =${price}, DATE='${currDate}' WHERE PID = ${id};
+    `,
+    );
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.error("Error updating product:", err);
   }
 };
 
@@ -76,14 +89,18 @@ const getTransactions = async () => {
      SELECT * FROM [Chaha].[dbo].[TBL_TRANSACTION_DETAILS]
     `,
     );
-    console.log(result);
 
     return result;
   } catch (err) {
     console.error("Error creating transaction:", err);
   }
 };
-const createTransaction = async ({ items, paymentMethod }) => {
+const createTransaction = async ({
+  items,
+  paymentMethod,
+  username,
+  customerName,
+}) => {
   const currDate = new Date().toISOString();
 
   try {
@@ -93,19 +110,19 @@ const createTransaction = async ({ items, paymentMethod }) => {
         return item.count >= 1;
       })
       .map((item) => {
-        return `(${item.id}, ${item.count}, ${item.price}, ${item.pricePerUnit}, '${paymentMethod}', '${currDate}')`;
+        return `(${item.id}, ${item.count}, ${item.price}, ${item.pricePerUnit}, N'${paymentMethod}', '${currDate}', '${username}', N'${customerName}')`;
       })
       .join(", ");
-    console.log(values);
+
     // console.log(items);
 
     const result = await pool.request().query(
       `
-      INSERT INTO [Chaha].[dbo].[TBL_TRANSACTION_DETAILS] (PID, QTY, TOTAL_AMT, MRP, PAYTYPE, DATE)
+      INSERT INTO [Chaha].[dbo].[TBL_TRANSACTION_DETAILS] (PID, QTY, TOTAL_AMT, MRP, PAYTYPE, DATE, USERNAME, CUSTOMER_NAME)
       VALUES ${values}
     `,
     );
-    console.log(result);
+
     return result;
   } catch (err) {
     console.error("Error creating transaction:", err);
@@ -122,7 +139,6 @@ const getPayType = async () => {
      SELECT * FROM [Chaha].[dbo].[tbl_PayType_Master]
     `,
     );
-    console.log(result);
 
     return result;
   } catch (err) {
@@ -136,10 +152,10 @@ const addPayType = async ({ name, status }) => {
     const result = await pool.request().query(
       `
       INSERT INTO [dbo].[tbl_PayType_Master]
-      VALUES ('${name}', '${currDate}', ${status})
+      VALUES (N'${name}', '${currDate}', ${status})
     `,
     );
-    console.log(result);
+
     return result;
   } catch (err) {
     console.error("Error creating transaction:", err);
@@ -152,7 +168,7 @@ const togglePayTypeStatus = async ({ status, payTypeId }) => {
       ` UPDATE [Chaha].[dbo].[tbl_PayType_Master] SET ACTIVE = ${status} WHERE PTID = ${payTypeId};
     `,
     );
-    console.log(result);
+
     return result;
   } catch (err) {
     console.error("Error creating transaction:", err);
@@ -163,6 +179,7 @@ module.exports = {
   getItems,
   addProduct,
   toggleProductStatus,
+  updateProduct,
   getTransactions,
   createTransaction,
   getPayType,

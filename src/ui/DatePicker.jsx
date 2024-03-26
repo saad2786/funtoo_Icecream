@@ -11,7 +11,7 @@ export const DatePicker = ({ control, name, placeholder }) => {
         name={name}
         render={({ field: { onChange, onBlur, value } }) => (
           <ReactDatePicker
-            className='h-12 w-40 rounded-lg border border-solid  px-2 py-3 text-base font-semibold  focus:outline-none focus:ring-4 text-black  disabled:bg-opacity-65 '
+            className='h-12 w-32 sm:w-40 rounded-lg border border-solid  px-2 py-3 text-base font-semibold  focus:outline-none focus:ring-4 text-black  disabled:bg-opacity-65 '
             onChange={onChange}
             onBlur={onBlur}
             selected={value}

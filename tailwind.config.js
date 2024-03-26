@@ -6,6 +6,7 @@ module.exports = {
     fontFamily: {
       heading: ['"Yatra One", system-ui'],
       marbtn: ['"Gotu", sans-serif'],
+      chalk: ['"Fredericka the Great", serif'],
     },
   },
   plugins: [require("daisyui")],

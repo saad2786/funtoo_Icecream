@@ -14,7 +14,8 @@ export default function ContextProvider({ children }) {
 const INITIAL_STATE = {
   products: [],
   transaction: [],
-  user: {},
+  activeProducts: [],
+  user: JSON.parse(sessionStorage.getItem("user")),
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -28,7 +29,7 @@ function reducer(state, action) {
         ...state,
         transactions: action.payload,
       };
-    case "user":
+    case "LOGIN_SUCCESS":
       return {
         ...state,
         user: action.payload,

@@ -6,38 +6,35 @@ import AddButton from "../ui/AddButton";
 import AddPayType from "../features/payType/AddPayType";
 import PayTypeRow from "../features/payType/PayTypeRow";
 import Loader from "../ui/Loader";
+import { fetchPayTypes } from "../features/payType/fetchPayTypes";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function Transactions() {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { data: payTypes, isFetching } = useQuery({
+  const { data: payTypes, isLoading } = useQuery({
     queryKey: ["payTypes"],
     queryFn: fetchPayTypes,
   });
 
-  async function fetchPayTypes() {
-    try {
-      const response = await axios.get("http://localhost:8000/paytypes");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching transactions:", error);
-    }
-  }
   function openModal() {
     setIsOpenModal(true);
   }
   function closeModal() {
     setIsOpenModal(false);
   }
-  if (isFetching) return <Loader />;
+  if (isLoading) return <Loader />;
   return (
     <>
-      <h2 className='text-center text-2xl font-sans mb-4 capitalize'>
+      <h2 className="font-sans mb-4 text-center text-2xl capitalize">
         Payment Methods Available
       </h2>
-      <AddButton openModal={openModal}>+ Add</AddButton>
-      <div className='overflow-x-auto mt-4 max-h-[75vh] border-2 border-stone-500'>
-        <table className='table  bg-white'>
-          <thead className=' bg-slate-600 text-slate-50'>
+      <div className="flex w-full items-center justify-end">
+        <AddButton openModal={openModal}>+ Add</AddButton>
+      </div>
+      <div className="mt-4 max-h-[75vh] overflow-x-auto border-2 border-stone-500">
+        <table className="table  bg-white">
+          <thead className=" bg-slate-600 text-slate-50">
             <tr>
               <th>ID</th>
               <th>Method </th>

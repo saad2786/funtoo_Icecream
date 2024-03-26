@@ -13,7 +13,7 @@ app.use(cors());
 app.post("/login", async (req, res) => {
   try {
     const result = await operationDB.getUser(req.body);
-    console.log(result);
+
     res.status(200).json(result.recordset);
     return result.recordset;
   } catch (err) {
@@ -22,7 +22,7 @@ app.post("/login", async (req, res) => {
 });
 
 //Products
-app.get("/items", async (req, res) => {
+app.get("/products", async (req, res) => {
   try {
     const result = await operationDB.getItems();
     res.status(200).json(result.recordset);
@@ -31,20 +31,29 @@ app.get("/items", async (req, res) => {
     console.log(err);
   }
 });
-app.post("/item", async (req, res) => {
+app.post("/product", async (req, res) => {
   try {
     const result = await operationDB.addProduct(req.body);
-    console.log(result);
+
     res.status(200).json(result);
     return result;
   } catch (err) {
     console.log(err);
   }
 });
-app.put("/item", async (req, res) => {
+app.put("/product", async (req, res) => {
   try {
     const result = await operationDB.toggleProductStatus(req.body);
-    console.log(result);
+
+    res.status(200).json(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.put("/updateProduct", async (req, res) => {
+  try {
+    const result = await operationDB.updateProduct(req.body);
     res.status(200).json(result);
     return result;
   } catch (err) {
@@ -77,7 +86,7 @@ app.post("/submit", async (req, res) => {
 app.get("/paytypes", async (req, res) => {
   try {
     const result = await operationDB.getPayType();
-    res.status(200).json(result.recordset);
+    res.status(200).json(result?.recordset);
     return result.recordset;
   } catch (err) {
     console.log(err);
@@ -85,10 +94,7 @@ app.get("/paytypes", async (req, res) => {
 });
 app.post("/paytype", async (req, res) => {
   try {
-    console.log(req.body);
-
     const result = await operationDB.addPayType(req.body);
-    console.log(result);
     res.status(200).json(result);
     return result;
   } catch (err) {
@@ -97,9 +103,7 @@ app.post("/paytype", async (req, res) => {
 });
 app.put("/paytype", async (req, res) => {
   try {
-    console.log(req.body);
     const result = await operationDB.togglePayTypeStatus(req.body);
-    console.log(result);
     res.status(200).json(result);
     return result;
   } catch (err) {

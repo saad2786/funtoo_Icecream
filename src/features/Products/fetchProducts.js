@@ -1,10 +1,12 @@
-export const fetchItems = async () => {
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+export async function fetchProducts() {
   try {
-    const response = await axios.get("http://localhost:8000/items");
-    dispatch({ type: "products", payload: response.data });
-    setItems(response.data);
-    initializeCounts(response.data);
+    const response = await axios.get(`${BASE_URL}/products`);
+    return response.data;
   } catch (error) {
     console.error("Error fetching items:", error);
   }
-};
+}

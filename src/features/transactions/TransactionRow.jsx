@@ -1,18 +1,20 @@
 import { format } from "date-fns";
-export default function TransactionRow({ transaction, products }) {
-  const formattedDate = format(transaction.DATE, "dd-MM-yyyy");
+export default function TransactionRow({ transaction, products, serial }) {
+  const formattedDate = format(transaction.DATE, "dd-MM-yyyy hh:mm a");
   return (
     <tr
       className={`${
-        transaction.PAYTYPE === "Credit" && "bg-red-100 text-red-800 "
-      } ${transaction.PAYTYPE === "Cash" && "bg-green-100 text-green-800 "}
+        transaction.PAYTYPE === "उधार" && "bg-red-100 text-red-800 "
+      } ${transaction.PAYTYPE === "रोख" && "bg-green-100 text-green-800 "}
       ${
-        transaction.PAYTYPE === "Google Pay" && "bg-yellow-100 text-amber-800 "
+        transaction.PAYTYPE !== "उधार" &&
+        transaction.PAYTYPE !== "रोख" &&
+        "bg-yellow-100 text-amber-800 "
       } text-base   `}
     >
-      <td>{transaction.TID}</td>
+      <td>{serial}</td>
       <td>
-        <div className='w-32'>
+        <div className="w-32">
           {
             products?.find((product) => product.PID === transaction.PID)
               ?.PRODUCT_NAME
@@ -23,10 +25,20 @@ export default function TransactionRow({ transaction, products }) {
       <td>{transaction.QTY}</td>
       <td>{transaction.TOTAL_AMT}</td>
       <td>
-        <div className='w-24'>{transaction.PAYTYPE}</div>
+        <div className="w-24">{transaction.PAYTYPE}</div>
       </td>
       <td>
-        <div className='w-24'>{formattedDate}</div>
+        <div className="w-24">{transaction.USERNAME}</div>
+      </td>
+      <td>
+        <div className="w-24">
+          {transaction.CUSTOMER_NAME !== "null"
+            ? transaction.CUSTOMER_NAME
+            : "-"}
+        </div>
+      </td>
+      <td>
+        <div className="w-36">{formattedDate}</div>
       </td>
     </tr>
   );
