@@ -2,10 +2,8 @@ import React from "react";
 import SubmitButtton from "../../ui/SubmitButtton";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import axios from "axios";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { addPaytype } from "../../services/paytypeApi";
 
 export default function AddPayType({ closeModal }) {
   const { register, handleSubmit } = useForm();
@@ -21,16 +19,14 @@ export default function AddPayType({ closeModal }) {
     },
   });
   async function onSubmit(data) {
-    if (confirm("Do really want to add this?")) {
+    if (window.confirm("Do really want to add this?")) {
       data = {
         ...data,
         status: data.status === "Active" ? 1 : 0,
       };
-
       try {
-        const response = await axios.post(`${BASE_URL}/paytype`, data);
+        await addPaytype(data);
         closeModal();
-        return response.data;
       } catch (err) {
         console.log(err);
       }

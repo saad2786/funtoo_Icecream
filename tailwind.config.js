@@ -7,6 +7,7 @@ module.exports = {
       heading: ['"Yatra One", system-ui'],
       marbtn: ['"Gotu", sans-serif'],
       chalk: ['"Fredericka the Great", serif'],
+      cursive: ['"Caveat", cursive'],
     },
   },
   plugins: [require("daisyui")],

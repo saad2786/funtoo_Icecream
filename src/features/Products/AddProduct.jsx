@@ -1,11 +1,9 @@
 import React from "react";
 import SubmitButtton from "../../ui/SubmitButtton";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { addProduct } from "../../services/productApi";
 
 export default function AddProduct({ closeModal }) {
   const { register, handleSubmit } = useForm();
@@ -21,10 +19,9 @@ export default function AddProduct({ closeModal }) {
     },
   });
   async function onSubmit(data) {
-    if (confirm("Do really want to add this?")) {
+    if (window.confirm("Do really want to add this?")) {
       try {
-        const response = await axios.post(`${BASE_URL}/product`, data);
-        console.log(response);
+        await addProduct(data);
         closeModal();
       } catch (err) {
         console.log(err);

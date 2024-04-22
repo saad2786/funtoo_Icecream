@@ -32,9 +32,7 @@ export default function TransactionRow({ transaction, products, serial }) {
       </td>
       <td>
         <div className="w-24">
-          {transaction.CUSTOMER_NAME !== "null"
-            ? transaction.CUSTOMER_NAME
-            : "-"}
+          {transaction.CUSTOMER_NAME !== null ? transaction.CUSTOMER_NAME : "-"}
         </div>
       </td>
       <td>

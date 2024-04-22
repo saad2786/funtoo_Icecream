@@ -5,25 +5,34 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { DispatchContext } from "../context/ContextProvider";
 import { GiCoffeeCup } from "react-icons/gi";
+import { getUser } from "../services/userApi";
+import { FaIceCream } from "react-icons/fa6";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+// const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
-  const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useContext(DispatchContext);
 
   const navigate = useNavigate();
   async function onSubmit(data) {
     try {
-      const response = await axios.post(`${BASE_URL}/login`, data);
-      const payload = await response.data[0];
-      dispatch({ type: "LOGIN_SUCCESS", payload: payload });
-      sessionStorage.setItem("user", JSON.stringify(payload));
-      if (response) {
-        response.data[0].ROLE === 1
-          ? navigate("/admin/")
-          : navigate("/member/");
+      // const response = await axios.post(`${BASE_URL}/login`, data);
+      const response = await getUser(data);
+      if (response.status === 200) {
+        const payload = response.data;
+
+        sessionStorage.setItem("user", JSON.stringify(payload));
+
+        dispatch({ type: "LOGIN_SUCCESS", payload: payload });
+
+        // Navigate based on user role
+        if (payload.ROLE === 1) {
+          navigate("/admin/");
+        } else {
+          navigate("/member/");
+        }
       } else console.log("Invalid username and password");
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -32,10 +41,10 @@ export default function Login() {
   return (
     <div className="backgroundImage  flex h-screen w-screen flex-col items-center justify-center px-6 ">
       <div className="flex w-full flex-col items-center rounded-lg bg-slate-200 bg-opacity-50 px-4 py-6 backdrop-blur-sm  sm:w-96 sm:px-8">
-        <h1 className="mb-4 flex items-center justify-center gap-4 text-center font-heading text-4xl font-semibold text-red-900">
-          गुरु दत्त चहा
-          <span className="mb-3 flex items-start text-amber-700">
-            <GiCoffeeCup />
+        <h1 className="font-cursive mt-8 flex items-center justify-center gap-4 text-center  text-6xl font-bold text-red-900">
+          Funtoo
+          <span className="mb-3 flex items-start text-pink-400 ">
+            <FaIceCream />
           </span>
         </h1>
         <div className="card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl">

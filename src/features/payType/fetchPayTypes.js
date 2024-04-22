@@ -1,11 +1,10 @@
-import axios from "axios";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { getPaytypes } from "../../services/paytypeApi";
 
 export async function fetchPayTypes() {
   try {
-    const response = await axios.get(`${BASE_URL}/paytypes`);
-    return response.data;
+    const { data } = await getPaytypes();
+
+    return data;
   } catch (error) {
     console.error("Error fetching transactions:", error);
   }

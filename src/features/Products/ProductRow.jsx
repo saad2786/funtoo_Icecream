@@ -1,10 +1,9 @@
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { BiSolidEdit } from "react-icons/bi";
 import { format } from "date-fns";
+import { toggleProduct } from "../../services/productApi";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function ProductRow({ openModal, product }) {
   const formattedDate = format(product.DATE, "dd-MM-yyyy");
@@ -20,13 +19,13 @@ export default function ProductRow({ openModal, product }) {
     },
   });
   async function handleToggle() {
-    if (confirm("Do you really want to change status?")) {
+    if (window.confirm("Do you really want to change status?")) {
       try {
         const data = {
           status: product.ACTIVE ? 0 : 1,
           itemId: product.PID,
         };
-        const response = await axios.put(`${BASE_URL}/product`, data);
+        await toggleProduct(data);
       } catch (err) {
         console.log(err);
       }

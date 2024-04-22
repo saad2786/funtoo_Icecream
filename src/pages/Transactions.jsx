@@ -138,8 +138,8 @@ export default function Transactions() {
       >
         <table
           ref={tableRef}
-          className=" table rounded-none
-       bg-white"
+          className=" table rounded-none bg-white
+       text-center"
         >
           <thead className="h-12 w-full bg-slate-600 text-lg font-semibold text-slate-50">
             <tr className="w-full">

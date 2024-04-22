@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Context, DispatchContext } from "../context/ContextProvider";
-import { GiCoffeeCup } from "react-icons/gi";
+import { FaIceCream } from "react-icons/fa6";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import { toast } from "react-hot-toast";
 import Modal from "../ui/Modal";
 import AddCredit from "../features/Home/AddCredit";
 import { FaPowerOff } from "react-icons/fa6";
 import Loader from "../ui/Loader";
+import { getProducts } from "../services/productApi";
+import { addTransactions } from "../services/transactionApi";
+import { getPaytypes } from "../services/paytypeApi";
+
 const TeaShop = () => {
   const [items, setItems] = useState([]);
   const [counts, setCounts] = useState([]);
@@ -20,6 +23,8 @@ const TeaShop = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useContext(Context);
+  console.log(user);
+
   const navigate = useNavigate();
   const filteredItems = items.filter((item) => item.ACTIVE);
   const dispatch = useContext(DispatchContext);
@@ -31,10 +36,10 @@ const TeaShop = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/products");
-      dispatch({ type: "products", payload: response.data });
-      setItems(response.data);
-      initializeCounts(response.data);
+      const { data } = await getProducts();
+      dispatch({ type: "products", payload: data });
+      setItems(data);
+      initializeCounts(data);
     } catch (error) {
       console.error("Error fetching items:", error);
     }
@@ -42,8 +47,8 @@ const TeaShop = () => {
 
   async function fetchPayTypes() {
     try {
-      const response = await axios.get("http://localhost:8000/paytypes");
-      setPayTypes(response.data);
+      const { data } = await getPaytypes();
+      setPayTypes(data);
     } catch (error) {
       console.error("Error fetching transactions:", error);
     }
@@ -56,12 +61,12 @@ const TeaShop = () => {
       price: 0,
       pricePerUnit: item.MRP,
     }));
-    console.log(items);
+
     setCounts(initialCounts);
     setTotalAmount(0);
   };
   function restCount() {
-    if (confirm("Do you want to reset it?")) {
+    if (window.confirm("Do you want to reset it?")) {
       initializeCounts(items);
     }
   }
@@ -88,8 +93,7 @@ const TeaShop = () => {
   const submitData = async (data) => {
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:8000/submit", data);
-      if (response?.data[0]) console.log(response);
+      await addTransactions(data);
       toast.success("Successfully Submitted");
       setIsLoading(false);
       initializeCounts(items);
@@ -146,10 +150,10 @@ const TeaShop = () => {
       >
         <FaPowerOff />
       </button>
-      <h1 className="mt-8 flex items-center justify-center gap-4 text-center font-heading text-5xl font-semibold text-red-900">
-        गुरु दत्त चहा
-        <span className="mb-3 flex items-start text-amber-700">
-          <GiCoffeeCup />
+      <h1 className="font-cursive mt-8 flex items-center justify-center gap-4 text-center  text-8xl font-semibold text-red-900">
+        Funtoo
+        <span className="mb-3 flex items-start text-pink-400 ">
+          <FaIceCream />
         </span>
       </h1>
 
@@ -186,8 +190,8 @@ const TeaShop = () => {
       </div>
       <div className="mt-12 flex flex-wrap items-center justify-center gap-5">
         {payTypes
-          .filter((payType) => payType.ACTIVE)
-          .map((payType) => {
+          ?.filter((payType) => payType.ACTIVE)
+          ?.map((payType) => {
             return (
               <button
                 className="btn  bg-[#007F73] font-marbtn text-xl text-white hover:bg-[#1f4f42]"
