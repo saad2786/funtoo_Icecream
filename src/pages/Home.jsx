@@ -175,12 +175,12 @@ const TeaShop = () => {
                 index % 2
                   ? "bg-[#865439] hover:bg-[#482d1e]"
                   : "bg-[#D2042D] hover:bg-[#912238] "
-              }  h-fit w-[45%] px-3 py-4 font-marbtn text-[18px]  text-white`}
+              }  flex h-fit w-[45%] flex-col items-center justify-center px-3 py-4 font-marbtn text-[18px]  text-white`}
               onClick={() => handleItemClick(item.PID)}
             >
               {item.PRODUCT_NAME}
               {productCount?.count === 0 ? null : (
-                <div className="badge h-8 w-8 text-center text-xl font-extrabold">
+                <div className="badge  h-8 w-8 text-center text-xl font-extrabold">
                   {productCount.count}
                 </div>
               )}
