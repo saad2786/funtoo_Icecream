@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <div className="backgroundImage  flex h-screen w-screen flex-col items-center justify-center px-6 ">
       <div className="flex w-full flex-col items-center rounded-lg bg-slate-200 bg-opacity-50 px-4 py-6 backdrop-blur-md  sm:w-96 sm:px-8">
-        <h1 className="font-indi mt-4 flex items-center justify-center gap-4 text-center  text-6xl font-bold text-red-900">
+        <h1 className="font-indi mt-4 flex items-center justify-center  text-center  text-6xl font-bold text-red-900">
           Funtoo
           <span className="mb-3 flex items-start text-pink-400 ">
             <img src="/images/logo.png" alt="" className="w-36" />

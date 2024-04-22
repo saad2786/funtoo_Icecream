@@ -150,7 +150,7 @@ const TeaShop = () => {
       >
         <FaPowerOff />
       </button>
-      <h1 className="font-indi mt-8 flex items-center justify-center gap-4 text-center  text-8xl font-semibold text-red-900">
+      <h1 className="font-indi mt-8 flex items-center justify-center  text-center  text-7xl font-semibold text-red-900">
         Funtoo
         <span className="mb-3 flex items-start text-pink-400 ">
           <img src="/images/logo.png" alt="" className="w-36" />
@@ -164,9 +164,10 @@ const TeaShop = () => {
       ) : (
         <div className="mx-auto mt-4 flex  h-5 w-40 items-center justify-center "></div>
       )}
-      <div className="mt-2 flex max-h-[45vh] flex-wrap content-start items-start justify-center gap-4 overflow-y-scroll rounded-xl  bg-slate-200 py-4 shadow-inner shadow-slate-400">
+      <div className="mt-2 flex max-h-[40vh] flex-wrap content-start items-start justify-center    gap-4 overflow-y-scroll  rounded-xl bg-slate-200  py-4 shadow-inner shadow-slate-600">
         {filteredItems?.map((item, index) => {
           const productCount = counts?.find((count) => count.id === item.PID);
+
           return (
             <button
               key={item.PID}
