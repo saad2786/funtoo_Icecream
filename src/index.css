@@ -21,7 +21,7 @@ html{
   height: 5px;
 }
 .backgroundImage {
-  background-image: url('/images/background.jpg');
+  background-image: url('/images/back.jpeg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
