@@ -54,19 +54,20 @@ export default function Products() {
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>Status </th>
               <th>MRP</th>
               <th>Date</th>
-              <th>Status </th>
               <th> </th>
             </tr>
           </thead>
           <tbody>
-            {products?.map((product) => {
+            {products?.map((product, index) => {
               return (
                 <ProductRow
                   product={product}
                   key={product.PID}
                   openModal={openEditModal}
+                  serial={index + 1}
                 />
               );
             })}

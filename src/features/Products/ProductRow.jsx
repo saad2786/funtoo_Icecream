@@ -4,8 +4,7 @@ import { BiSolidEdit } from "react-icons/bi";
 import { format } from "date-fns";
 import { toggleProduct } from "../../services/productApi";
 
-
-export default function ProductRow({ openModal, product }) {
+export default function ProductRow({ openModal, product, serial }) {
   const formattedDate = format(product.DATE, "dd-MM-yyyy");
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
@@ -35,13 +34,9 @@ export default function ProductRow({ openModal, product }) {
   }
   return (
     <tr key={product.PID}>
-      <td className="w-fit">{product.PID}</td>
+      <td className="w-fit">{serial}</td>
       <td>
         <div className="w-28">{product.PRODUCT_NAME}</div>
-      </td>
-      <td>{product.MRP}</td>
-      <td>
-        <div className="w-24">{formattedDate}</div>
       </td>
       <td>
         <button
@@ -54,6 +49,10 @@ export default function ProductRow({ openModal, product }) {
         >
           {product.ACTIVE ? "Active" : "Deactive"}
         </button>
+      </td>
+      <td className="font-semibold">{product.MRP}</td>
+      <td>
+        <div className="w-24">{formattedDate}</div>
       </td>
       <td>
         <button

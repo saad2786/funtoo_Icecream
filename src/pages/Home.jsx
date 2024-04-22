@@ -150,10 +150,10 @@ const TeaShop = () => {
       >
         <FaPowerOff />
       </button>
-      <h1 className="font-cursive mt-8 flex items-center justify-center gap-4 text-center  text-8xl font-semibold text-red-900">
+      <h1 className="font-indi mt-8 flex items-center justify-center gap-4 text-center  text-8xl font-semibold text-red-900">
         Funtoo
         <span className="mb-3 flex items-start text-pink-400 ">
-          <FaIceCream />
+          <img src="/images/logo.png" alt="" className="w-36" />
         </span>
       </h1>
 
@@ -164,10 +164,9 @@ const TeaShop = () => {
       ) : (
         <div className="mx-auto mt-4 flex  h-5 w-40 items-center justify-center "></div>
       )}
-      <div className="mt-2 flex max-h-[55vh] flex-wrap content-start items-start    justify-center gap-4  overflow-y-scroll py-2">
+      <div className="mt-2 flex max-h-[45vh] flex-wrap content-start items-start justify-center gap-4 overflow-y-scroll rounded-xl  bg-slate-200 py-4 shadow-inner shadow-slate-400">
         {filteredItems?.map((item, index) => {
           const productCount = counts?.find((count) => count.id === item.PID);
-
           return (
             <button
               key={item.PID}
@@ -175,7 +174,7 @@ const TeaShop = () => {
                 index % 2
                   ? "bg-[#865439] hover:bg-[#482d1e]"
                   : "bg-[#D2042D] hover:bg-[#912238] "
-              }  h-fit w-[45%] px-3 py-4 font-marbtn text-xl  text-white`}
+              }  h-fit w-[45%] px-3 py-4 font-marbtn text-[18px]  text-white`}
               onClick={() => handleItemClick(item.PID)}
             >
               {item.PRODUCT_NAME}

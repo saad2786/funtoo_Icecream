@@ -8,6 +8,7 @@ module.exports = {
       marbtn: ['"Gotu", sans-serif'],
       chalk: ['"Fredericka the Great", serif'],
       cursive: ['"Caveat", cursive'],
+      indi: ['"Indie Flower", cursive'],
     },
   },
   plugins: [require("daisyui")],

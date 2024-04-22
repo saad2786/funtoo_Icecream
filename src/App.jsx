@@ -45,6 +45,7 @@ export default function App() {
             element={user ? <AdminLayout /> : <Navigate to="/login" />}
           >
             <Route index element={<Dashboard />} />
+            <Route path="home" element={<Home />} />
             <Route path="product" element={<Products />} />
             <Route path="transaction" element={<Transactions />} />
             <Route path="paytype" element={<PayType />} />
