@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import PayType from "./pages/PayType";
 import { Toaster } from "react-hot-toast";
 import { Context } from "./context/ContextProvider";
+import NotFound from "./ui/NotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -56,6 +57,7 @@ export default function App() {
           >
             <Route index element={<Home />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
       <Toaster
