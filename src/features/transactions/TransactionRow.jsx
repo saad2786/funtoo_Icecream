@@ -1,6 +1,26 @@
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-export default function TransactionRow({ transaction, products, serial }) {
-  const formattedDate = format(transaction.DATE, "dd-MM-yyyy hh:mm a");
+
+export default function TransactionRow({
+  transaction,
+  products,
+  serial,
+  onSelect,
+  isAllSelect,
+}) {
+  const formattedDate = format(
+    new Date(transaction.DATE),
+    "dd-MM-yyyy hh:mm a",
+  );
+  const [isChecked, setIsChecked] = useState(false);
+  useEffect(() => {
+    setIsChecked(isAllSelect);
+  }, [isAllSelect]);
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    onSelect(transaction.TID, !isChecked);
+  };
+
   return (
     <tr
       className={`${
@@ -12,6 +32,14 @@ export default function TransactionRow({ transaction, products, serial }) {
         "bg-yellow-100 text-amber-800 "
       } text-base   `}
     >
+      <td>
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          className="checkbox-error checkbox checkbox-xs bg-white"
+        />
+      </td>
       <td>{serial}</td>
       <td>
         <div className="w-32">

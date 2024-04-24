@@ -1,7 +1,8 @@
+/* eslint-disable eqeqeq */
 import React, { useState } from "react";
 import { useRef } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import TransactionRow from "../features/transactions/TransactionRow";
 
 import Loader from "../ui/Loader";
@@ -15,17 +16,22 @@ import { MdOutlineCurrencyRupee } from "react-icons/md";
 import { fetchTransactions } from "../features/transactions/fetchTransactions";
 import { fetchProducts } from "../features/Products/fetchProducts";
 import { fetchPayTypes } from "../features/payType/fetchPayTypes";
+import { deleteTransactions } from "../services/transactionApi";
+import toast from "react-hot-toast";
+import { BiTrash } from "react-icons/bi";
 
 export default function Transactions() {
   const [isOpenFilter, setIsOpenFilters] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(0);
   const [selectedPay, setSelectedPay] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [isAllChecked, setIsAllChecked] = useState(false);
+  const [selectedToDelete, setSelectedToDelete] = useState([]);
   const [details, setDetails] = useState([]);
   const [total, setTotal] = useState(0);
   const [qty, setQty] = useState(0);
   const tableRef = useRef(null);
-
+  const queryClient = useQueryClient();
   //SORTED BY DECSENDING ORDER OF DATE
 
   //REACT QUERY
@@ -41,7 +47,29 @@ export default function Transactions() {
     queryKey: ["payTypes"],
     queryFn: fetchPayTypes,
   });
-
+  const onDeleteTransactions = async () => {
+    const confirmation = window.confirm("Are you really want to delete?");
+    if (!confirmation) {
+      toast.error("Aborted delete transactions");
+      setSelectedToDelete([]);
+      return;
+    }
+    const { error } = await deleteTransactions({
+      transactionIds: selectedToDelete,
+    });
+    if (error) {
+      toast.error("Transactions deletion unsuccessfull");
+    } else {
+      toast.success("Successfully deleted transactions");
+      setSelectedToDelete([]);
+    }
+  };
+  const { mutate } = useMutation({
+    mutationFn: onDeleteTransactions,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["trasactions"]);
+    },
+  });
   const sortedTransactions = filteredTransactions?.sort((a, b) => {
     const dateA = new Date(a.DATE);
     const dateB = new Date(b.DATE);
@@ -50,7 +78,18 @@ export default function Transactions() {
 
   useEffect(() => {
     setFilteredTransactions(transactions);
-  }, []);
+  }, [transactions]);
+  useEffect(() => {
+    if (isAllChecked) {
+      setSelectedToDelete(() =>
+        filteredTransactions.map((transaction) => transaction.TID),
+      );
+      console.log(selectedToDelete);
+    } else {
+      setSelectedToDelete([]);
+      console.log(selectedToDelete);
+    }
+  }, [isAllChecked]);
 
   useEffect(() => {
     const { details, totalAmount, totalQty } = fetchDetails(
@@ -60,8 +99,23 @@ export default function Transactions() {
     setDetails(details);
     setTotal(totalAmount);
     setQty(totalQty);
-  }, [sortedTransactions, transactions]);
+  }, [payTypes, sortedTransactions, transactions]);
 
+  const onSelect = (transactionId, isChecked) => {
+    if (isChecked) {
+      setSelectedToDelete((prev) => [...prev, transactionId]);
+      console.log(selectedToDelete);
+    } else {
+      setSelectedToDelete((prev) =>
+        prev.filter((prevTransaction) => prevTransaction !== transactionId),
+      );
+      console.log(selectedToDelete);
+    }
+  };
+
+  const onToggleAllChecked = () => {
+    setIsAllChecked((prev) => !prev);
+  };
   //FILTER BY DATE
   function filterByDate({ fromDate = null, toDate = null }) {
     setFilteredTransactions(transactions);
@@ -94,9 +148,6 @@ export default function Transactions() {
   function toggleFilter() {
     setIsOpenFilters((prev) => !prev);
   }
-  //FOOTER DETAILS
-
-  //DATE FETCHERS
 
   const isLoading = trnsactionsLoading || productsLoading || payTypesLoading;
   if (isLoading) return <Loader />;
@@ -106,6 +157,15 @@ export default function Transactions() {
         Transaction history
       </h2>
       <div className="flex w-full items-center justify-end gap-4">
+        {selectedToDelete.length > 0 && (
+          <button
+            className="btn btn-error btn-sm text-base text-white "
+            onClick={mutate}
+          >
+            <BiTrash />
+            Delete
+          </button>
+        )}
         <AddButton openModal={toggleFilter}>
           <FaFilter />
           Filter
@@ -143,6 +203,14 @@ export default function Transactions() {
         >
           <thead className="h-12 w-full bg-slate-600 text-lg font-semibold text-slate-50">
             <tr className="w-full">
+              <th>
+                <input
+                  type="checkbox"
+                  checked={isAllChecked}
+                  onChange={() => onToggleAllChecked()}
+                  className="checkbox-error checkbox checkbox-xs bg-white"
+                />
+              </th>
               <th>Sr. No.</th>
               <th>Product</th>
               <th>MRP</th>
@@ -152,7 +220,6 @@ export default function Transactions() {
               <th>By</th>
               <th>Customer</th>
               <th>Date</th>
-              {/* Adjust the width here */}
             </tr>
           </thead>
 
@@ -164,6 +231,8 @@ export default function Transactions() {
                   transaction={transaction}
                   serial={index + 1}
                   products={products}
+                  isAllSelect={isAllChecked}
+                  onSelect={onSelect}
                 />
               );
             })}

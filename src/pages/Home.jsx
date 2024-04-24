@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context, DispatchContext } from "../context/ContextProvider";
-import { FaIceCream } from "react-icons/fa6";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 import { toast } from "react-hot-toast";
 import Modal from "../ui/Modal";
@@ -175,12 +174,15 @@ const TeaShop = () => {
                 index % 2
                   ? "bg-[#865439] hover:bg-[#482d1e]"
                   : "bg-[#D2042D] hover:bg-[#912238] "
-              }  flex h-fit w-[45%] flex-col items-center justify-center px-3 py-4 font-marbtn text-[18px]  text-white`}
+              }  relative z-0 flex h-fit w-[45%] flex-col items-center justify-center px-3 py-4 font-marbtn  text-[18px] text-white`}
               onClick={() => handleItemClick(item.PID)}
             >
               {item.PRODUCT_NAME}
+              <div className="badge h-8  w-fit rounded-md text-center text-xl font-extrabold">
+                {item.MRP}/-
+              </div>
               {productCount?.count === 0 ? null : (
-                <div className="badge  h-8 w-8 text-center text-xl font-extrabold">
+                <div className="badge absolute -right-2 -top-2 h-8 w-8  border-none bg-blue-600 text-center text-xl font-extrabold text-white">
                   {productCount.count}
                 </div>
               )}

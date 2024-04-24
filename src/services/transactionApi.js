@@ -45,3 +45,20 @@ export const addTransactions = async ({
     console.log(error.message);
   }
 };
+
+export const deleteTransactions = async ({ transactionIds }) => {
+  try {
+    console.log(transactionIds);
+
+    const { error } = await supabase
+      .from("transactions")
+      .delete()
+      .in("TID", transactionIds);
+
+    console.log(error);
+    return { error };
+  } catch (error) {
+    console.log(error.message);
+    return error;
+  }
+};
